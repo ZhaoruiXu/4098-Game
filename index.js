@@ -36,14 +36,15 @@ const game4096 = {
               game4096.updateScoreboard();
             }
             game4096.checkGameOver();
-          }
-          if (game4096.isGameOver) {
-            console.log("game over");
+            if (game4096.isGameOver) {
+              console.log("game over");
+              game4096.updateGameOverScores();
 
-            setTimeout(() => {
-              $("#section-in-game").hide();
-              $("#section-end-screen").show();
-            }, 2500);
+              setTimeout(() => {
+                $("#section-in-game").hide();
+                $("#section-end-screen").show();
+              }, 2500);
+            }
           }
 
           break;
@@ -57,15 +58,17 @@ const game4096 = {
               game4096.updateScoreboard();
             }
             game4096.checkGameOver();
-          }
-          if (game4096.isGameOver) {
-            console.log("game over");
+            if (game4096.isGameOver) {
+              console.log("game over");
+              game4096.updateGameOverScores();
 
-            setTimeout(() => {
-              $("#section-in-game").hide();
-              $("#section-end-screen").show();
-            }, 2500);
+              setTimeout(() => {
+                $("#section-in-game").hide();
+                $("#section-end-screen").show();
+              }, 2500);
+            }
           }
+
           break;
 
         case "ArrowUp":
@@ -77,15 +80,17 @@ const game4096 = {
               game4096.updateScoreboard();
             }
             game4096.checkGameOver();
-          }
-          if (game4096.isGameOver) {
-            console.log("game over");
+            if (game4096.isGameOver) {
+              console.log("game over");
+              game4096.updateGameOverScores();
 
-            setTimeout(() => {
-              $("#section-in-game").hide();
-              $("#section-end-screen").show();
-            }, 2500);
+              setTimeout(() => {
+                $("#section-in-game").hide();
+                $("#section-end-screen").show();
+              }, 2500);
+            }
           }
+
           break;
 
         case "ArrowDown":
@@ -97,15 +102,17 @@ const game4096 = {
               game4096.updateScoreboard();
             }
             game4096.checkGameOver();
-          }
-          if (game4096.isGameOver) {
-            console.log("game over");
+            if (game4096.isGameOver) {
+              console.log("game over");
+              game4096.updateGameOverScores();
 
-            setTimeout(() => {
-              $("#section-in-game").hide();
-              $("#section-end-screen").show();
-            }, 2500);
+              setTimeout(() => {
+                $("#section-in-game").hide();
+                $("#section-end-screen").show();
+              }, 2500);
+            }
           }
+
           break;
         default:
       }
@@ -285,6 +292,11 @@ const game4096 = {
         }
       });
     });
+  },
+
+  updateGameOverScores: () => {
+    $(".end-scores p:nth-child(1)").text(`Score: ${game4096.currentScore}`);
+    $(".end-scores p:nth-child(2)").text(`Best: ${game4096.bestScore}`);
   },
 
   numberCellColorSelector: cell => {

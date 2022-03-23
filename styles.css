@@ -115,6 +115,18 @@ input[type="submit"]:hover {
   color: #ffffff;
 }
 
+button {
+  color: #ffffffc4;
+  transition: 0.25s;
+}
+
+button:hover {
+  box-shadow: 0 0.75px 0 0.75px #c98c48;
+  transform: translateY(-0.75px);
+  /* transform: scale(1.025); */
+  color: #ffffff;
+}
+
 /* In game screen */
 
 #section-score-board {
@@ -243,25 +255,27 @@ input[type="submit"]:hover {
   margin: 8rem 0 4rem 0;
 }
 
-#section-end-screen p {
+#section-end-screen .end-scores {
   display: block;
-  font-size: 2rem;
-  font-weight: 600;
-  width: 15rem;
-  height: 5rem;
-  margin: 0 auto;
-  line-height: 5rem;
+  font-size: 1.75rem;
+  font-weight: 500;
+  width: 20rem;
+  margin: 0rem auto 4rem auto;
   border-radius: 1rem;
   background-color: #c69c6d;
 }
 
+#section-end-screen p {
+  padding: 1rem 0;
+}
+
 #section-end-screen button {
   display: block;
-  margin: 2rem auto;
+  margin: 1.5rem auto;
   width: 10rem;
   height: 4rem;
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.25rem;
+  font-weight: 500;
   border: 0;
   border-radius: 0.75rem;
   background-color: #c98c48;
