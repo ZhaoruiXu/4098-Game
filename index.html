@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>4096</title>
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Custom style sheet -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="game-wrapper">
+      <!-- <div id="section-start-screen-container"> -->
+      <section id="section-start-screen">
+        <h1>4096</h1>
+        <form>
+          <label for="user-name">Please, enter a name to start !</label>
+          <input type="text" id="user-name" placeholder="Player name" />
+          <input class="enter-btn" type="submit" value="Enter" />
+        </form>
+      </section>
+      <!-- </div> -->
+
+      <div id="section-in-game" hidden>
+        <section id="section-score-board">
+          <h2>4096</h2>
+          <article class="current-score">
+            <h2>Score</h2>
+            <p></p>
+          </article>
+          <article class="best-score">
+            <h2>Best</h2>
+            <p></p>
+          </article>
+          <h3 class="milestone-message"></h3>
+          <button class="newGameBtn">New Game</button>
+          <button class="quitBtn">Quit</button>
+          <button class="instructionBtn">Instruction</button>
+        </section>
+        <section id="section-grid">
+          <div class="grid-background">
+            <div class="grid"></div>
+          </div>
+        </section>
+      </div>
+
+      <section id="section-end-screen" hidden>
+        <article>
+          <h2>Game Over</h2>
+          <p>Score: 4230</p>
+          <button class="restartBtn">Restart</button>
+          <button class="homeBtn">Home</button>
+        </article>
+      </section>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+      integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+      crossorigin="anonymous"
+    ></script>
+    <script src="index.js"></script>
+  </body>
+</html>

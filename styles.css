@@ -1,0 +1,269 @@
+body {
+  background-color: #1e302a;
+  font-family: "Rubik", sans-serif;
+}
+
+h1 {
+  display: inline-block;
+  font-size: 3rem;
+  margin: 8rem 0 4rem 0;
+  color: #ffffff;
+  background-color: #8516b5;
+  width: 10rem;
+  height: 10rem;
+  line-height: 10rem;
+  border-radius: 0.5rem;
+}
+
+h2,
+p {
+  margin: 0;
+}
+
+.shaking {
+  animation: left-to-right 0.05s 3 alternate;
+}
+
+@keyframes left-to-right {
+  0% {
+    transform: translateX(-2.5px);
+  }
+
+  100% {
+    transform: translateX(2.5px);
+  }
+}
+
+label {
+  display: block;
+  font-weight: 500;
+  margin: 0;
+  color: #593a5f;
+  font-size: 1.25rem;
+}
+
+#game-wrapper {
+  position: relative;
+  background-color: #f6ebd6;
+  width: 26.5rem;
+  /* height: 54rem; */
+  margin: 3rem auto;
+  border-radius: 2rem;
+}
+
+/* Start screen */
+
+#section-start-screen {
+  text-align: center;
+  width: 100%;
+  height: 44.25rem;
+}
+
+input::placeholder {
+  transition: color 0.25s;
+}
+
+input[type="text"] {
+  width: 70%;
+  height: 3rem;
+  font-size: 1rem;
+  border: 0;
+  margin: 1.25rem 0;
+  padding: 0 1rem;
+  background-color: #c7b299;
+  border-radius: 0.25rem;
+  transition: box-shadow 0.25s;
+}
+
+input[type="text"]::placeholder {
+  color: #ffffff9d;
+  /* padding-left: 0.5rem; */
+}
+
+input[type="text"]:hover {
+  box-shadow: inset 0 0 0 0.2rem #c69c6d;
+}
+
+input:hover::placeholder {
+  color: #ffffff;
+}
+
+input[type="text"]:focus {
+  outline: 0.2rem solid #c69c6d;
+  box-shadow: none;
+}
+
+input[type="submit"] {
+  display: block;
+  width: 25%;
+  height: 3rem;
+  margin: 2rem auto;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #c69c6d;
+  color: #ffffffc4;
+  border: 0;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+input[type="submit"]:hover {
+  box-shadow: 0 0.75px 0 0.75px #c98c48;
+  transform: translateY(-0.75px);
+  /* transform: scale(1.025); */
+  color: #ffffff;
+}
+
+/* In game screen */
+
+#section-score-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: 3rem;
+  row-gap: 0.5rem;
+  column-gap: 1.5rem;
+  align-content: center;
+  align-items: center;
+  justify-items: stretch;
+  width: 87.5%;
+  height: 14rem;
+  margin: 0 auto;
+}
+
+#section-score-board h2 {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+#section-score-board > h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+#section-score-board p {
+  font-weight: 400;
+}
+
+#section-score-board h3 {
+  font-weight: 600;
+  font-size: 1.25rem;
+  grid-area: 2/1/3/4;
+  align-self: flex-end;
+  margin: 0;
+}
+
+#section-score-board article {
+  text-align: center;
+  background-color: #c7b299;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+}
+
+#section-score-board button {
+  background-color: #c69c6d;
+  padding: 0.5rem 0.75rem;
+  border: 0;
+  border-radius: 0.15rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.newGameBtn {
+  grid-area: 3/1/4/2;
+  align-self: flex-end;
+}
+
+.quitBtn {
+  grid-area: 3/2/4/3;
+  align-self: flex-end;
+}
+
+.instructionBtn {
+  grid-area: 3/3/4/4;
+  align-self: flex-end;
+}
+
+#section-grid {
+  height: 30rem;
+  width: 100%;
+  display: grid;
+  align-items: center;
+  border-top: 0.25rem solid #000000;
+}
+
+.grid-background {
+  background-color: #6b655a;
+  margin: 0 1.15rem;
+  padding: 0.6rem 0;
+}
+
+.grid {
+  width: 23rem;
+  height: 23rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 0.6rem;
+  /* justify-items: center; */
+  /* align-items: center; */
+  margin: 0 auto;
+}
+
+.grid-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-transition {
+  transition: background-color 0.15s ease;
+}
+
+.grid-number p {
+  /* font-size: 2.85rem; */
+  font-weight: 500;
+  /* color: #3d3a37; */
+  /* text-align: center; */
+}
+
+/* End game screen */
+
+#section-end-screen {
+  text-align: center;
+  width: 100%;
+  height: 44.25rem;
+  overflow: hidden;
+}
+
+#section-end-screen h2 {
+  /* or make the parent overflow hidden */
+  /* display: inline-block; */
+  font-size: 3rem;
+  margin: 8rem 0 4rem 0;
+}
+
+#section-end-screen p {
+  display: block;
+  font-size: 2rem;
+  font-weight: 600;
+  width: 15rem;
+  height: 5rem;
+  margin: 0 auto;
+  line-height: 5rem;
+  border-radius: 1rem;
+  background-color: #c69c6d;
+}
+
+#section-end-screen button {
+  display: block;
+  margin: 2rem auto;
+  width: 10rem;
+  height: 4rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border: 0;
+  border-radius: 0.75rem;
+  background-color: #c98c48;
+  cursor: pointer;
+}
