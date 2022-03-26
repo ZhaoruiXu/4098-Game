@@ -3,6 +3,7 @@
 const game4096 = {
   playerName: undefined,
   isGameOver: undefined,
+  isGamePaused: undefined,
   currentScore: 0,
   bestScore: 0,
   mileStone: 8,
@@ -11,24 +12,26 @@ const game4096 = {
   spawnSound: new Audio("audios/spawn-sound.wav"),
   mergeSound: new Audio("audios/merge-sound.mp3"),
   mileStoneHitSound: new Audio("audios/milestone-hit-sound.wav"),
-  // matrix: [
-  //   ["", "", "", ""],
-  //   ["", "", "", ""],
-  //   ["", "", "", ""],
-  //   ["", "", "", ""],
-  // ],
   matrix: [
-    [16, 128, 32, ""],
-    [8, 32, 4096, ""],
-    [2, 512, 1024, ""],
-    [8, 16384, 8192, 64],
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""],
   ],
+  // matrix: [
+  //   [16, 128, 32, ""],
+  //   [8, 32, 4096, ""],
+  //   [2, 512, 1024, ""],
+  //   [8, 16384, 8192, 64],
+  // ],
 
   init: () => {
     $(window).keydown(e => {
       switch (e.key) {
         case "ArrowLeft":
-          if (!game4096.isGameOver) {
+        case "A":
+        case "a":
+          if (!game4096.isGameOver && !game4096.isGamePaused) {
             game4096.commandLeft();
             if (game4096.didMove) {
               game4096.randomPopulate();
@@ -50,7 +53,9 @@ const game4096 = {
           break;
 
         case "ArrowRight":
-          if (!game4096.isGameOver) {
+        case "D":
+        case "d":
+          if (!game4096.isGameOver && !game4096.isGamePaused) {
             game4096.commandRight();
             if (game4096.didMove) {
               game4096.randomPopulate();
@@ -72,7 +77,9 @@ const game4096 = {
           break;
 
         case "ArrowUp":
-          if (!game4096.isGameOver) {
+        case "W":
+        case "w":
+          if (!game4096.isGameOver && !game4096.isGamePaused) {
             game4096.commandUp();
             if (game4096.didMove) {
               game4096.randomPopulate();
@@ -94,7 +101,9 @@ const game4096 = {
           break;
 
         case "ArrowDown":
-          if (!game4096.isGameOver) {
+        case "S":
+        case "s":
+          if (!game4096.isGameOver && !game4096.isGamePaused) {
             game4096.commandDown();
             if (game4096.didMove) {
               game4096.randomPopulate();
@@ -158,6 +167,17 @@ const game4096 = {
       $("#section-start-screen").show();
     });
 
+    $(".instructionBtn").click(() => {
+      game4096.isGamePaused = true;
+      $("#section-instruction-screen").show();
+      console.log("show");
+    });
+
+    $(".closeBtn").click(() => {
+      game4096.isGamePaused = false;
+      $("#section-instruction-screen").hide();
+    });
+
     $(".restartBtn").click(() => {
       game4096.resetGame();
       game4096.randomPopulate();
@@ -176,6 +196,9 @@ const game4096 = {
       $("#section-end-screen").hide();
       $("#section-start-screen").show();
     });
+
+    // Due to CSS implementation, HTML inline attributes "hidden" not valid
+    $("#section-instruction-screen").hide();
   },
 
   resetGame: () => {

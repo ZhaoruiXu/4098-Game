@@ -1,3 +1,5 @@
+/* Elements */
+
 body {
   background-color: #1e302a;
   font-family: "Rubik", sans-serif;
@@ -20,6 +22,16 @@ p {
   margin: 0;
 }
 
+label {
+  display: block;
+  font-weight: 500;
+  margin: 0;
+  color: #593a5f;
+  font-size: 1.25rem;
+}
+
+/* Utility */
+
 .shaking {
   animation: left-to-right 0.05s 3 alternate;
 }
@@ -34,13 +46,7 @@ p {
   }
 }
 
-label {
-  display: block;
-  font-weight: 500;
-  margin: 0;
-  color: #593a5f;
-  font-size: 1.25rem;
-}
+/* Composition */
 
 #game-wrapper {
   position: relative;
@@ -49,7 +55,10 @@ label {
   /* height: 54rem; */
   margin: 3rem auto;
   border-radius: 2rem;
+  overflow: hidden;
 }
+
+/* Components */
 
 /* Start screen */
 
@@ -237,6 +246,50 @@ button:hover {
   font-weight: 500;
   /* color: #3d3a37; */
   /* text-align: center; */
+}
+
+/* Instruction Overlay Screen */
+
+#section-instruction-screen {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff88;
+  backdrop-filter: blur(1px);
+}
+
+.section-instruction-content {
+  background-color: #f6ebd6;
+  width: 80%;
+  height: 50%;
+  margin: 0 auto;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+}
+
+.section-instruction-content article {
+  margin: 3rem auto 0 auto;
+}
+
+.section-instruction-content p {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.section-instruction-content button {
+  display: block;
+  margin: 4.5rem auto 0 auto;
+  width: 7rem;
+  height: 3rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  border: 0;
+  border-radius: 0.5rem;
+  background-color: #c98c48;
+  cursor: pointer;
 }
 
 /* End game screen */

@@ -22,7 +22,12 @@
         <h1>4096</h1>
         <form>
           <label for="user-name">Please, enter a name to start !</label>
-          <input type="text" id="user-name" placeholder="Player name" />
+          <input
+            type="text"
+            id="user-name"
+            placeholder="Player name"
+            autocomplete="off"
+          />
           <input class="enter-btn" type="submit" value="Enter" />
         </form>
       </section>
@@ -51,16 +56,27 @@
         </section>
       </div>
 
+      <section id="section-instruction-screen">
+        <div class="section-instruction-content">
+          <article>
+            <p>
+              Use your arrow keys to move the blocks. Blocks with the same
+              number merge into one when they touch. Add them up to reach 4098!
+            </p>
+          </article>
+
+          <button class="closeBtn">Close</button>
+        </div>
+      </section>
+
       <section id="section-end-screen" hidden>
-        <article>
-          <h2>Game Over</h2>
-          <div class="end-scores">
-            <p class="okkk"></p>
-            <p class="jbk"></p>
-          </div>
-          <button class="restartBtn">Restart</button>
-          <button class="homeBtn">Home</button>
-        </article>
+        <h2>Game Over</h2>
+        <div class="end-scores">
+          <p class="okkk"></p>
+          <p class="jbk"></p>
+        </div>
+        <button class="restartBtn">Restart</button>
+        <button class="homeBtn">Home</button>
       </section>
     </div>
 
