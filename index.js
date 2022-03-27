@@ -4,7 +4,8 @@ const game4096 = {
   playerName: undefined,
   isGameOver: undefined,
   isGamePaused: undefined,
-  spawnIndex: undefined,
+  spawnIndex: [],
+  mergeIndex: [],
   currentScore: 0,
   bestScore: 0,
   mileStone: 8,
@@ -280,7 +281,26 @@ const game4096 = {
         game4096.numberCellColorSelector(cell);
       });
     });
-    $(`#grid-${game4096.spawnIndex}`).parent().addClass("spawn");
+
+    game4096.spawnIndex.forEach(oneIndex => {
+      $(`#grid-${oneIndex}`).parent().addClass("spawn");
+      setTimeout(() => {
+        $(`#grid-${oneIndex}`).parent().removeClass("spawn");
+      }, 200);
+    });
+
+    if (game4096.mergeIndex.length > 0) {
+      game4096.mergeIndex.forEach(oneIndex => {
+        $(`#grid-${oneIndex}`).parent().addClass("merge");
+        setTimeout(() => {
+          $(`#grid-${oneIndex}`).parent().removeClass("merge");
+        }, 200);
+      });
+      console.log("merged");
+    }
+
+    game4096.spawnIndex = [];
+    game4096.mergeIndex = [];
   },
 
   updateScoreboard: () => {
@@ -332,9 +352,9 @@ const game4096 = {
     let [randNumber, randRowIndex, randColIndex] = game4096.randomGenerator();
 
     // remove the spawn from previously spawned itemd
-    $(`#grid-${game4096.spawnIndex}`).parent().removeClass("spawn");
+    // $(`#grid-${game4096.spawnIndex}`).parent().removeClass("spawn");
 
-    game4096.spawnIndex = randRowIndex * 4 + randColIndex;
+    game4096.spawnIndex.push(randRowIndex * 4 + randColIndex);
 
     if (game4096.matrix[randRowIndex].includes("")) {
       game4096.matrix[randRowIndex][randColIndex] = randNumber;
@@ -345,8 +365,11 @@ const game4096 = {
   },
 
   commandLeft: () => {
+    // $(`#grid-${game4096.mergeIndex}`).parent().removeClass("merge");
+    // $("[class*='merge']").removeClass("merge");
+
     game4096.didMove = false;
-    game4096.matrix.forEach(oneRow => {
+    game4096.matrix.forEach((oneRow, oneRowIndex) => {
       // merge
       for (let i = 0; i <= oneRow.length - 1; i++) {
         for (let j = i + 1; j <= oneRow.length - 1; j++) {
@@ -358,6 +381,9 @@ const game4096 = {
             oneRow[j] = "";
             game4096.currentScore += oneRow[i];
             game4096.didMove = true;
+
+            game4096.mergeIndex.push(oneRowIndex * 4 + i);
+
             game4096.mergeSound.currentTime = 0;
             game4096.mergeSound.play();
             // break out the current inner loop so the outer loop can continue
@@ -371,6 +397,15 @@ const game4096 = {
           if (!oneRow[i] && oneRow[j]) {
             oneRow[i] = oneRow[j];
             oneRow[j] = "";
+
+            // merge animation logic
+            if (game4096.mergeIndex.includes(oneRowIndex * 4 + j)) {
+              const indexToChange = game4096.mergeIndex.indexOf(
+                oneRowIndex * 4 + j
+              );
+              game4096.mergeIndex[indexToChange] = oneRowIndex * 4 + i;
+            }
+
             game4096.didMove = true;
           }
         }
@@ -379,8 +414,11 @@ const game4096 = {
   },
 
   commandRight: () => {
+    // $(`#grid-${game4096.mergeIndex}`).parent().removeClass("merge");
+    // $("[class*='merge']").removeClass("merge");
+
     game4096.didMove = false;
-    game4096.matrix.forEach(oneRow => {
+    game4096.matrix.forEach((oneRow, oneRowIndex) => {
       //merge
       for (let i = oneRow.length - 1; i >= 0; i--) {
         for (let j = i - 1; j >= 0; j--) {
@@ -392,6 +430,9 @@ const game4096 = {
             oneRow[j] = "";
             game4096.currentScore += oneRow[i];
             game4096.didMove = true;
+
+            game4096.mergeIndex.push(oneRowIndex * 4 + i);
+
             game4096.mergeSound.currentTime = 0;
             game4096.mergeSound.play();
             // break out the current inner loop so the outer loop can continue
@@ -405,6 +446,16 @@ const game4096 = {
           if (!oneRow[i] && oneRow[j]) {
             oneRow[i] = oneRow[j];
             oneRow[j] = "";
+
+            // merge animation logic
+            if (game4096.mergeIndex.includes(oneRowIndex * 4 + j)) {
+              console.log("right switched");
+              const indexToChange = game4096.mergeIndex.indexOf(
+                oneRowIndex * 4 + j
+              );
+              game4096.mergeIndex[indexToChange] = oneRowIndex * 4 + i;
+            }
+
             game4096.didMove = true;
           }
         }
@@ -413,6 +464,9 @@ const game4096 = {
   },
 
   commandUp: () => {
+    // $(`#grid-${game4096.mergeIndex}`).parent().removeClass("merge");
+    // $("[class*='merge']").removeClass("merge");
+
     game4096.didMove = false;
     const matrix = game4096.matrix;
 
@@ -430,6 +484,9 @@ const game4096 = {
             matrix[k][i] = "";
             game4096.currentScore += matrix[j][i];
             game4096.didMove = true;
+
+            game4096.mergeIndex.push(j * 4 + i);
+
             game4096.mergeSound.currentTime = 0;
             game4096.mergeSound.play();
             break;
@@ -448,6 +505,13 @@ const game4096 = {
           if (!matrix[j][i] && matrix[k][i]) {
             matrix[j][i] = matrix[k][i];
             matrix[k][i] = "";
+
+            // merge animation logic
+            if (game4096.mergeIndex.includes(k * 4 + i)) {
+              const indexToChange = game4096.mergeIndex.indexOf(k * 4 + i);
+              game4096.mergeIndex[indexToChange] = j * 4 + i;
+            }
+
             game4096.didMove = true;
           }
         }
@@ -456,6 +520,9 @@ const game4096 = {
   },
 
   commandDown: () => {
+    // $(`#grid-${game4096.mergeIndex}`).parent().removeClass("merge");
+    // $("[class*='merge']").removeClass("merge");
+
     game4096.didMove = false;
     const matrix = game4096.matrix;
 
@@ -473,6 +540,9 @@ const game4096 = {
             matrix[k][i] = "";
             game4096.currentScore += matrix[j][i];
             game4096.didMove = true;
+
+            game4096.mergeIndex.push(j * 4 + i);
+
             game4096.mergeSound.currentTime = 0;
             game4096.mergeSound.play();
             break;
@@ -491,6 +561,13 @@ const game4096 = {
           if (!matrix[j][i] && matrix[k][i]) {
             matrix[j][i] = matrix[k][i];
             matrix[k][i] = "";
+
+            // merge animation logic
+            if (game4096.mergeIndex.includes(k * 4 + i)) {
+              const indexToChange = game4096.mergeIndex.indexOf(k * 4 + i);
+              game4096.mergeIndex[indexToChange] = j * 4 + i;
+            }
+
             game4096.didMove = true;
           }
         }
