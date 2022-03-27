@@ -4,6 +4,7 @@ const game4096 = {
   playerName: undefined,
   isGameOver: undefined,
   isGamePaused: undefined,
+  spawnIndex: undefined,
   currentScore: 0,
   bestScore: 0,
   mileStone: 8,
@@ -26,6 +27,10 @@ const game4096 = {
   // ],
 
   init: () => {
+    $("#section-in-game-screen").hide();
+    $("#section-instruction-screen").hide();
+    $("#section-end-screen").hide();
+
     $(window).keydown(e => {
       switch (e.key) {
         case "ArrowLeft":
@@ -40,11 +45,10 @@ const game4096 = {
             }
             game4096.checkGameOver();
             if (game4096.isGameOver) {
-              console.log("game over");
               game4096.updateGameOverScores();
 
               setTimeout(() => {
-                $("#section-in-game").hide();
+                $("#section-in-game-screen").hide();
                 $("#section-end-screen").show();
               }, 2500);
             }
@@ -64,11 +68,10 @@ const game4096 = {
             }
             game4096.checkGameOver();
             if (game4096.isGameOver) {
-              console.log("game over");
               game4096.updateGameOverScores();
 
               setTimeout(() => {
-                $("#section-in-game").hide();
+                $("#section-in-game-screen").hide();
                 $("#section-end-screen").show();
               }, 2500);
             }
@@ -88,11 +91,10 @@ const game4096 = {
             }
             game4096.checkGameOver();
             if (game4096.isGameOver) {
-              console.log("game over");
               game4096.updateGameOverScores();
 
               setTimeout(() => {
-                $("#section-in-game").hide();
+                $("#section-in-game-screen").hide();
                 $("#section-end-screen").show();
               }, 2500);
             }
@@ -112,11 +114,10 @@ const game4096 = {
             }
             game4096.checkGameOver();
             if (game4096.isGameOver) {
-              console.log("game over");
               game4096.updateGameOverScores();
 
               setTimeout(() => {
-                $("#section-in-game").hide();
+                $("#section-in-game-screen").hide();
                 $("#section-end-screen").show();
               }, 2500);
             }
@@ -129,7 +130,6 @@ const game4096 = {
 
     $("form").submit(e => {
       e.preventDefault();
-      console.log("shaking 1");
 
       if (!$("#user-name").val()) {
         $("input[type='text']").addClass("shaking");
@@ -142,7 +142,7 @@ const game4096 = {
       } else {
         game4096.playerName = $("#user-name").val();
         $("#section-start-screen").hide();
-        $("#section-in-game").show();
+        $("#section-in-game-screen").show();
         game4096.randomPopulate();
         game4096.randomPopulate();
         game4096.populateGridDOM();
@@ -163,14 +163,13 @@ const game4096 = {
       game4096.resetGame();
       game4096.updateGridDOM();
       game4096.isGameOver = false;
-      $("#section-in-game").hide();
+      $("#section-in-game-screen").hide();
       $("#section-start-screen").show();
     });
 
     $(".instructionBtn").click(() => {
       game4096.isGamePaused = true;
       $("#section-instruction-screen").show();
-      console.log("show");
     });
 
     $(".closeBtn").click(() => {
@@ -186,7 +185,7 @@ const game4096 = {
       game4096.updateScoreboard();
       game4096.isGameOver = false;
       $("#section-end-screen").hide();
-      $("#section-in-game").show();
+      $("#section-in-game-screen").show();
     });
 
     $(".homeBtn").click(() => {
@@ -196,9 +195,6 @@ const game4096 = {
       $("#section-end-screen").hide();
       $("#section-start-screen").show();
     });
-
-    // Due to CSS implementation, HTML inline attributes "hidden" not valid
-    $("#section-instruction-screen").hide();
   },
 
   resetGame: () => {
@@ -226,13 +222,11 @@ const game4096 = {
     });
 
     if (matrixFull) {
-      console.log("matrix full reached");
       // loop through rows
       for (let i = 0; i < matrix.length; i++) {
         // loop through items in each row
         for (let j = 0; j < matrix[0].length - 1; j++) {
           if (matrix[i][j] != matrix[i][j + 1]) {
-            console.log(matrix[i][j], matrix[i][j + 1]);
             game4096.isGameOver = true;
           } else if (matrix[i][j] === matrix[i][j + 1]) {
             game4096.isGameOver = false;
@@ -265,7 +259,7 @@ const game4096 = {
         item.forEach((subItem, colIndex) => {
           let index = rowIndex * 4 + colIndex;
           $(".grid").append(
-            `<div class="grid-number"><p id="grid-${index}">${subItem}</p></div>`
+            `<div class="grid-number-wrapper"><div class="grid-number"><p id="grid-${index}">${subItem}</p></div></div>`
           );
           const cell = $(`#grid-${index}`);
           game4096.numberCellColorSelector(cell);
@@ -286,6 +280,7 @@ const game4096 = {
         game4096.numberCellColorSelector(cell);
       });
     });
+    $(`#grid-${game4096.spawnIndex}`).parent().addClass("spawn");
   },
 
   updateScoreboard: () => {
@@ -322,93 +317,8 @@ const game4096 = {
     $(".end-scores p:nth-child(2)").text(`Best: ${game4096.bestScore}`);
   },
 
-  numberCellColorSelector: cell => {
-    const number = cell.text();
-    switch (number) {
-      case "":
-        cell.parent().removeClass("add-transition");
-        cell.parent().css("background-color", "#8f8577");
-        break;
-      case "2":
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#d9c9bd");
-        cell.css({ color: "#3d3a37", "font-size": "2.85rem" });
-        break;
-      case "4":
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#e6c7ae");
-        cell.css({ color: "#3d3a37", "font-size": "2.85rem" });
-        break;
-      case "8":
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#f0a669");
-        cell.css({ color: "#f2ede9", "font-size": "2.85rem" });
-        break;
-      case "16":
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#f08e3e");
-        cell.css({ color: "#f2ede9", "font-size": "2.75rem" });
-        break;
-      case "32":
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#e8705a");
-        cell.css({ color: "#f2ede9", "font-size": "2.6rem" });
-        break;
-      case "64":
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#de543c");
-        cell.css({ color: "#f2ede9", "font-size": "2.55rem" });
-        break;
-      case "128":
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#f5c66e");
-        cell.css({ color: "#f2ede9", "font-size": "2.35rem" });
-        break;
-      case "256":
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#e8b256");
-        cell.css({ color: "#f2ede9", "font-size": "2.25rem" });
-        break;
-      case "512":
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#e6a637");
-        cell.css({ color: "#f2ede9", "font-size": "2.25rem" });
-        break;
-      case "1024":
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#e39b20");
-        cell.css({ color: "#f2ede9", "font-size": "1.8rem" });
-        break;
-      case "2048":
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#d68a06");
-        cell.css({ color: "#f2ede9", "font-size": "1.7rem" });
-        break;
-      case "4096":
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#8516b5");
-        cell.css({ color: "#f2ede9", "font-size": "1.65rem" });
-        break;
-      case "8192":
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#b516ad");
-        cell.css({ color: "#f2ede9", "font-size": "1.65rem" });
-        break;
-      case "16384":
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#b51640");
-        cell.css({ color: "#f2ede9", "font-size": "1.4rem" });
-        break;
-      default:
-        cell.parent().addClass("add-transition");
-        cell.parent().css("background-color", "#630000");
-        cell.css({ color: "#f2ede9", "font-size": "1.4rem" });
-    }
-  },
-
   randomGenerator: () => {
     let randNumber = game4096.randomPoll[Math.round(Math.random() * 1)];
-    // console.log(randNumber);
     let randColIndex = Math.floor(Math.random() * 4);
     let randRowIndex = Math.floor(Math.random() * 4);
 
@@ -421,8 +331,14 @@ const game4096 = {
   randomPopulate: () => {
     let [randNumber, randRowIndex, randColIndex] = game4096.randomGenerator();
 
+    // remove the spawn from previously spawned itemd
+    $(`#grid-${game4096.spawnIndex}`).parent().removeClass("spawn");
+
+    game4096.spawnIndex = randRowIndex * 4 + randColIndex;
+
     if (game4096.matrix[randRowIndex].includes("")) {
       game4096.matrix[randRowIndex][randColIndex] = randNumber;
+
       game4096.spawnSound.currentTime = 0; // to cut off the previous unfinished sound playback
       game4096.spawnSound.play();
     }
@@ -579,6 +495,90 @@ const game4096 = {
           }
         }
       }
+    }
+  },
+
+  numberCellColorSelector: cell => {
+    const number = cell.text();
+    switch (number) {
+      case "":
+        cell.parent().removeClass("add-transition");
+        cell.parent().css("background-color", "#8f8577");
+        break;
+      case "2":
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#d9c9bd");
+        cell.css({ color: "#3d3a37", "font-size": "2.85rem" });
+        break;
+      case "4":
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#e6c7ae");
+        cell.css({ color: "#3d3a37", "font-size": "2.85rem" });
+        break;
+      case "8":
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#f0a669");
+        cell.css({ color: "#f2ede9", "font-size": "2.85rem" });
+        break;
+      case "16":
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#f08e3e");
+        cell.css({ color: "#f2ede9", "font-size": "2.75rem" });
+        break;
+      case "32":
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#e8705a");
+        cell.css({ color: "#f2ede9", "font-size": "2.6rem" });
+        break;
+      case "64":
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#de543c");
+        cell.css({ color: "#f2ede9", "font-size": "2.55rem" });
+        break;
+      case "128":
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#f5c66e");
+        cell.css({ color: "#f2ede9", "font-size": "2.35rem" });
+        break;
+      case "256":
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#e8b256");
+        cell.css({ color: "#f2ede9", "font-size": "2.25rem" });
+        break;
+      case "512":
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#e6a637");
+        cell.css({ color: "#f2ede9", "font-size": "2.25rem" });
+        break;
+      case "1024":
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#e39b20");
+        cell.css({ color: "#f2ede9", "font-size": "1.8rem" });
+        break;
+      case "2048":
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#d68a06");
+        cell.css({ color: "#f2ede9", "font-size": "1.7rem" });
+        break;
+      case "4096":
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#8516b5");
+        cell.css({ color: "#f2ede9", "font-size": "1.65rem" });
+        break;
+      case "8192":
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#b516ad");
+        cell.css({ color: "#f2ede9", "font-size": "1.65rem" });
+        break;
+      case "16384":
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#b51640");
+        cell.css({ color: "#f2ede9", "font-size": "1.4rem" });
+        break;
+      default:
+        cell.parent().addClass("add-transition");
+        cell.parent().css("background-color", "#630000");
+        cell.css({ color: "#f2ede9", "font-size": "1.4rem" });
     }
   },
 };
