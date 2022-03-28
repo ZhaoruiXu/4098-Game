@@ -137,6 +137,7 @@ const game4096 = {
         setTimeout(() => {
           $("input[type='text']").removeClass("shaking");
         }, 200);
+
         $("label")
           .text("Sorry, please enter a name to start")
           .css("color", "#bf0d00");
@@ -263,7 +264,7 @@ const game4096 = {
             `<div class="grid-number-wrapper"><div class="grid-number"><p id="grid-${index}">${subItem}</p></div></div>`
           );
           const cell = $(`#grid-${index}`);
-          game4096.numberCellColorSelector(cell);
+          game4096.numberCellCssSelector(cell);
         });
       });
     } else {
@@ -278,7 +279,7 @@ const game4096 = {
         let index = rowIndex * 4 + colIndex;
         $(`#grid-${index}`).text(subItem);
         const cell = $(`#grid-${index}`);
-        game4096.numberCellColorSelector(cell);
+        game4096.numberCellCssSelector(cell);
       });
     });
 
@@ -296,9 +297,9 @@ const game4096 = {
           $(`#grid-${oneIndex}`).parent().removeClass("merge");
         }, 200);
       });
-      console.log("merged");
     }
 
+    // empty the arrays after each grid DOM update
     game4096.spawnIndex = [];
     game4096.mergeIndex = [];
   },
@@ -311,6 +312,7 @@ const game4096 = {
       `Hi ${game4096.playerName}, slide to unlock ${game4096.mileStone}`
     );
 
+    // update the best score once suprpassed by current score
     if (game4096.currentScore > game4096.bestScore) {
       game4096.bestScore = game4096.currentScore;
       $(".best-score p").text(game4096.bestScore);
@@ -319,14 +321,17 @@ const game4096 = {
     matrix.forEach(oneRow => {
       oneRow.forEach(item => {
         if (item >= game4096.mileStone) {
+          // double the milestone everytime the previou is surpassed
           game4096.mileStone = 2 * game4096.mileStone;
           game4096.mileStoneHitSound.play();
           $(".milestone-message").text(
             `Hi ${game4096.playerName}, slide to unlock ${game4096.mileStone}`
           );
-          if (game4096.mileStone > 32768) {
-            $(".milestone-message").css("font-size", "1.1rem");
-          }
+
+          $(".milestone-message").addClass("color-flash");
+          setTimeout(() => {
+            $(".milestone-message").removeClass("color-flash");
+          }, 1000);
         }
       });
     });
@@ -343,6 +348,7 @@ const game4096 = {
     let randRowIndex = Math.floor(Math.random() * 4);
 
     if (game4096.matrix[randRowIndex][randColIndex]) {
+      // recursion until the base case of finding the new random spot is avaliable then return
       [randNumber, randRowIndex, randColIndex] = game4096.randomGenerator();
     }
     return [randNumber, randRowIndex, randColIndex];
@@ -351,17 +357,15 @@ const game4096 = {
   randomPopulate: () => {
     let [randNumber, randRowIndex, randColIndex] = game4096.randomGenerator();
 
-    // remove the spawn from previously spawned itemd
-    // $(`#grid-${game4096.spawnIndex}`).parent().removeClass("spawn");
-
+    // populate the spawned block index in grid
     game4096.spawnIndex.push(randRowIndex * 4 + randColIndex);
 
-    if (game4096.matrix[randRowIndex].includes("")) {
-      game4096.matrix[randRowIndex][randColIndex] = randNumber;
+    // set the new random number in grid
+    game4096.matrix[randRowIndex][randColIndex] = randNumber;
 
-      game4096.spawnSound.currentTime = 0; // to cut off the previous unfinished sound playback
-      game4096.spawnSound.play();
-    }
+    // to cut off the previous unfinished sound playback by resettin the sound progress
+    game4096.spawnSound.currentTime = 0;
+    game4096.spawnSound.play();
   },
 
   commandLeft: () => {
@@ -377,15 +381,25 @@ const game4096 = {
             // break out the current inner loop so the outer loop can continue
             break;
           } else if (oneRow[i] && oneRow[i] === oneRow[j]) {
+            // combine two identical numbers into one number
             oneRow[i] += oneRow[j];
+
+            // set the one used to merge to be empty
             oneRow[j] = "";
+
+            // combined number scores
             game4096.currentScore += oneRow[i];
+
+            // set flag indicate at least one of the blocks has moved
             game4096.didMove = true;
 
+            // add merged index into array
             game4096.mergeIndex.push(oneRowIndex * 4 + i);
 
+            // reset the progress on the sound playback, so it can be overrided by the next immediate trigger
             game4096.mergeSound.currentTime = 0;
             game4096.mergeSound.play();
+
             // break out the current inner loop so the outer loop can continue
             break;
           }
@@ -395,14 +409,20 @@ const game4096 = {
       for (let i = 0; i <= oneRow.length - 1; i++) {
         for (let j = i + 1; j <= oneRow.length - 1; j++) {
           if (!oneRow[i] && oneRow[j]) {
+            // let the empty value index take the immediate neigbour block vlaue
             oneRow[i] = oneRow[j];
+
+            // set the immediate block to no vlaue
             oneRow[j] = "";
 
             // merge animation logic
             if (game4096.mergeIndex.includes(oneRowIndex * 4 + j)) {
+              // scan through merge index array and store the index of the ones have shifted their position in grid(aka grid index changed)
               const indexToChange = game4096.mergeIndex.indexOf(
                 oneRowIndex * 4 + j
               );
+
+              // use the merge array index to change to their corresponding grid index after shifting
               game4096.mergeIndex[indexToChange] = oneRowIndex * 4 + i;
             }
 
@@ -428,7 +448,9 @@ const game4096 = {
           } else if (oneRow[i] && oneRow[i] === oneRow[j]) {
             oneRow[i] += oneRow[j];
             oneRow[j] = "";
+
             game4096.currentScore += oneRow[i];
+
             game4096.didMove = true;
 
             game4096.mergeIndex.push(oneRowIndex * 4 + i);
@@ -449,10 +471,10 @@ const game4096 = {
 
             // merge animation logic
             if (game4096.mergeIndex.includes(oneRowIndex * 4 + j)) {
-              console.log("right switched");
               const indexToChange = game4096.mergeIndex.indexOf(
                 oneRowIndex * 4 + j
               );
+
               game4096.mergeIndex[indexToChange] = oneRowIndex * 4 + i;
             }
 
@@ -482,6 +504,7 @@ const game4096 = {
           } else if (matrix[j][i] && matrix[j][i] === matrix[k][i]) {
             matrix[j][i] += matrix[k][i];
             matrix[k][i] = "";
+
             game4096.currentScore += matrix[j][i];
             game4096.didMove = true;
 
@@ -509,6 +532,7 @@ const game4096 = {
             // merge animation logic
             if (game4096.mergeIndex.includes(k * 4 + i)) {
               const indexToChange = game4096.mergeIndex.indexOf(k * 4 + i);
+
               game4096.mergeIndex[indexToChange] = j * 4 + i;
             }
 
@@ -538,6 +562,7 @@ const game4096 = {
           } else if (matrix[j][i] && matrix[j][i] === matrix[k][i]) {
             matrix[j][i] += matrix[k][i];
             matrix[k][i] = "";
+
             game4096.currentScore += matrix[j][i];
             game4096.didMove = true;
 
@@ -565,6 +590,7 @@ const game4096 = {
             // merge animation logic
             if (game4096.mergeIndex.includes(k * 4 + i)) {
               const indexToChange = game4096.mergeIndex.indexOf(k * 4 + i);
+
               game4096.mergeIndex[indexToChange] = j * 4 + i;
             }
 
@@ -575,16 +601,19 @@ const game4096 = {
     }
   },
 
-  numberCellColorSelector: cell => {
+  numberCellCssSelector: cell => {
     const number = cell.text();
     switch (number) {
       case "":
         cell.parent().removeClass("add-transition");
-        cell.parent().css("background-color", "#8f8577");
+        cell.parent().css("background-color", "transparent");
         break;
       case "2":
+        // smooth the color change animation
         cell.parent().addClass("add-transition");
+        // change background color to correspond to the block value
         cell.parent().css("background-color", "#d9c9bd");
+        // change font size
         cell.css({ color: "#3d3a37", "font-size": "2.85rem" });
         break;
       case "4":
