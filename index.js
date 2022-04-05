@@ -8,6 +8,11 @@ $(() => {
     isGameOver: undefined,
     isGamePaused: undefined,
     didMove: undefined,
+    startTouchY: undefined,
+    endTouchY: undefined,
+    startTouchX: undefined,
+    endTouchX: undefined,
+    swipeMotion: undefined,
     currentScore: 0,
     bestScore: 0,
     mileStone: 8,
@@ -39,7 +44,11 @@ $(() => {
           case "ArrowLeft":
           case "A":
           case "a":
-            if (!game4096.isGameOver && !game4096.isGamePaused) {
+            if (
+              !game4096.isGameOver &&
+              !game4096.isGamePaused &&
+              !game4096.swipeMotion
+            ) {
               game4096.commandLeft();
 
               if (game4096.didMove) {
@@ -64,7 +73,11 @@ $(() => {
           case "ArrowRight":
           case "D":
           case "d":
-            if (!game4096.isGameOver && !game4096.isGamePaused) {
+            if (
+              !game4096.isGameOver &&
+              !game4096.isGamePaused &&
+              !game4096.swipeMotion
+            ) {
               game4096.commandRight();
               if (game4096.didMove) {
                 game4096.randomPopulate();
@@ -87,7 +100,11 @@ $(() => {
           case "ArrowUp":
           case "W":
           case "w":
-            if (!game4096.isGameOver && !game4096.isGamePaused) {
+            if (
+              !game4096.isGameOver &&
+              !game4096.isGamePaused &&
+              !game4096.swipeMotion
+            ) {
               game4096.commandUp();
               if (game4096.didMove) {
                 game4096.randomPopulate();
@@ -110,7 +127,11 @@ $(() => {
           case "ArrowDown":
           case "S":
           case "s":
-            if (!game4096.isGameOver && !game4096.isGamePaused) {
+            if (
+              !game4096.isGameOver &&
+              !game4096.isGamePaused &&
+              !game4096.swipeMotion
+            ) {
               game4096.commandDown();
               if (game4096.didMove) {
                 game4096.randomPopulate();
@@ -131,6 +152,19 @@ $(() => {
             break;
           default:
         }
+      });
+
+      $("#section-grid").on("touchstart", e => {
+        game4096.swipeMotion = true;
+        game4096.startTouchY = e.changedTouches[0].pageY;
+        game4096.startTouchX = e.changedTouches[0].pageX;
+      });
+
+      $("#section-grid").on("touchend", e => {
+        game4096.swipeMotion = false;
+        game4096.endTouchX = e.changedTouches[0].pageX;
+        game4096.endTouchY = e.changedTouches[0].pageY;
+        game4096.swipeDirection();
       });
 
       $("form").submit(e => {
@@ -207,6 +241,114 @@ $(() => {
         $("#section-end-screen").hide();
         $("#section-start-screen").show();
       });
+    },
+
+    swipeDirection: () => {
+      let distanceX = game4096.startTouchX - game4096.endTouchX;
+      let distanceY = game4096.startTouchY - game4096.endTouchY;
+      // console.log(distanceX, distanceY);
+      if (
+        distanceX < 50 &&
+        distanceX > -50 &&
+        distanceY < 50 &&
+        distanceY > -50
+      ) {
+        return;
+      } else if (distanceX > 50) {
+        if (
+          !game4096.isGameOver &&
+          !game4096.isGamePaused &&
+          !game4096.swipeMotion
+        ) {
+          game4096.commandLeft();
+
+          if (game4096.didMove) {
+            game4096.randomPopulate();
+            game4096.updateGridDOM();
+            game4096.updateScoreboard();
+          }
+          game4096.checkGameOver();
+          if (game4096.isGameOver) {
+            game4096.updateGameOverScores();
+
+            // pause on the game over status for 2.5 seconds before going to the "game over screen"
+            setTimeout(() => {
+              $("#section-in-game-screen").hide();
+              $("#section-end-screen").show();
+            }, 2500);
+          }
+        }
+        return "move left";
+      } else if (distanceX < -50) {
+        if (
+          !game4096.isGameOver &&
+          !game4096.isGamePaused &&
+          !game4096.swipeMotion
+        ) {
+          game4096.commandRight();
+          if (game4096.didMove) {
+            game4096.randomPopulate();
+            game4096.updateGridDOM();
+            game4096.updateScoreboard();
+          }
+          game4096.checkGameOver();
+          if (game4096.isGameOver) {
+            game4096.updateGameOverScores();
+
+            setTimeout(() => {
+              $("#section-in-game-screen").hide();
+              $("#section-end-screen").show();
+            }, 2500);
+          }
+        }
+        return "move right";
+      } else if (distanceY > 50) {
+        if (
+          !game4096.isGameOver &&
+          !game4096.isGamePaused &&
+          !game4096.swipeMotion
+        ) {
+          game4096.commandUp();
+          if (game4096.didMove) {
+            game4096.randomPopulate();
+            game4096.updateGridDOM();
+            game4096.updateScoreboard();
+          }
+          game4096.checkGameOver();
+          if (game4096.isGameOver) {
+            game4096.updateGameOverScores();
+
+            setTimeout(() => {
+              $("#section-in-game-screen").hide();
+              $("#section-end-screen").show();
+            }, 2500);
+          }
+        }
+        return "move up";
+      } else if (distanceY < -50) {
+        if (
+          !game4096.isGameOver &&
+          !game4096.isGamePaused &&
+          !game4096.swipeMotion
+        ) {
+          game4096.commandDown();
+          if (game4096.didMove) {
+            game4096.randomPopulate();
+            game4096.updateGridDOM();
+            game4096.updateScoreboard();
+          }
+          game4096.checkGameOver();
+          if (game4096.isGameOver) {
+            game4096.updateGameOverScores();
+
+            setTimeout(() => {
+              $("#section-in-game-screen").hide();
+              $("#section-end-screen").show();
+            }, 2500);
+          }
+        }
+        return "move down";
+      }
     },
 
     resetGame: () => {
