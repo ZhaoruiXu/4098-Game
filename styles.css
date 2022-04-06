@@ -3,6 +3,7 @@
 body {
   background-color: #12221d;
   font-family: "Rubik", sans-serif;
+  overflow: hidden;
 }
 
 h1 {

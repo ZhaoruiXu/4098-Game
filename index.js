@@ -44,110 +44,28 @@ $(() => {
           case "ArrowLeft":
           case "A":
           case "a":
-            if (
-              !game4096.isGameOver &&
-              !game4096.isGamePaused &&
-              !game4096.swipeMotion
-            ) {
-              game4096.commandLeft();
-
-              if (game4096.didMove) {
-                game4096.randomPopulate();
-                game4096.updateGridDOM();
-                game4096.updateScoreboard();
-              }
-              game4096.checkGameOver();
-              if (game4096.isGameOver) {
-                game4096.updateGameOverScores();
-
-                // pause on the game over status for 2.5 seconds before going to the "game over screen"
-                setTimeout(() => {
-                  $("#section-in-game-screen").hide();
-                  $("#section-end-screen").show();
-                }, 2500);
-              }
-            }
+            game4096.commandDirection("left");
 
             break;
 
           case "ArrowRight":
           case "D":
           case "d":
-            if (
-              !game4096.isGameOver &&
-              !game4096.isGamePaused &&
-              !game4096.swipeMotion
-            ) {
-              game4096.commandRight();
-              if (game4096.didMove) {
-                game4096.randomPopulate();
-                game4096.updateGridDOM();
-                game4096.updateScoreboard();
-              }
-              game4096.checkGameOver();
-              if (game4096.isGameOver) {
-                game4096.updateGameOverScores();
-
-                setTimeout(() => {
-                  $("#section-in-game-screen").hide();
-                  $("#section-end-screen").show();
-                }, 2500);
-              }
-            }
+            game4096.commandDirection("right");
 
             break;
 
           case "ArrowUp":
           case "W":
           case "w":
-            if (
-              !game4096.isGameOver &&
-              !game4096.isGamePaused &&
-              !game4096.swipeMotion
-            ) {
-              game4096.commandUp();
-              if (game4096.didMove) {
-                game4096.randomPopulate();
-                game4096.updateGridDOM();
-                game4096.updateScoreboard();
-              }
-              game4096.checkGameOver();
-              if (game4096.isGameOver) {
-                game4096.updateGameOverScores();
-
-                setTimeout(() => {
-                  $("#section-in-game-screen").hide();
-                  $("#section-end-screen").show();
-                }, 2500);
-              }
-            }
+            game4096.commandDirection("up");
 
             break;
 
           case "ArrowDown":
           case "S":
           case "s":
-            if (
-              !game4096.isGameOver &&
-              !game4096.isGamePaused &&
-              !game4096.swipeMotion
-            ) {
-              game4096.commandDown();
-              if (game4096.didMove) {
-                game4096.randomPopulate();
-                game4096.updateGridDOM();
-                game4096.updateScoreboard();
-              }
-              game4096.checkGameOver();
-              if (game4096.isGameOver) {
-                game4096.updateGameOverScores();
-
-                setTimeout(() => {
-                  $("#section-in-game-screen").hide();
-                  $("#section-end-screen").show();
-                }, 2500);
-              }
-            }
+            game4096.commandDirection("down");
 
             break;
           default:
@@ -173,8 +91,11 @@ $(() => {
 
         if (!$("#user-name").val()) {
           $("input[type='text']").addClass("shaking");
+
+          let timeoutID;
+          clearTimeout(timeoutID);
           // wait for the "shaking" aniamtion carries out fully then remove the class
-          setTimeout(() => {
+          timeoutID = setTimeout(() => {
             $("input[type='text']").removeClass("shaking");
           }, 200);
 
@@ -246,111 +167,71 @@ $(() => {
     swipeDirection: () => {
       let distanceX = game4096.startTouchX - game4096.endTouchX;
       let distanceY = game4096.startTouchY - game4096.endTouchY;
-      // console.log(distanceX, distanceY);
       if (
-        distanceX < 50 &&
-        distanceX > -50 &&
-        distanceY < 50 &&
-        distanceY > -50
+        (distanceX > 50 || distanceX < -50) &&
+        (distanceY > 50 || distanceY < -50)
       ) {
         return;
       } else if (distanceX > 50) {
-        if (
-          !game4096.isGameOver &&
-          !game4096.isGamePaused &&
-          !game4096.swipeMotion
-        ) {
-          game4096.commandLeft();
+        game4096.commandDirection("left");
 
-          if (game4096.didMove) {
-            game4096.randomPopulate();
-            game4096.updateGridDOM();
-            game4096.updateScoreboard();
-          }
-          game4096.checkGameOver();
-          if (game4096.isGameOver) {
-            game4096.updateGameOverScores();
-
-            // pause on the game over status for 2.5 seconds before going to the "game over screen"
-            setTimeout(() => {
-              $("#section-in-game-screen").hide();
-              $("#section-end-screen").show();
-            }, 2500);
-          }
-        }
-        return "move left";
+        // return "move left";
       } else if (distanceX < -50) {
-        if (
-          !game4096.isGameOver &&
-          !game4096.isGamePaused &&
-          !game4096.swipeMotion
-        ) {
-          game4096.commandRight();
-          if (game4096.didMove) {
-            game4096.randomPopulate();
-            game4096.updateGridDOM();
-            game4096.updateScoreboard();
-          }
-          game4096.checkGameOver();
-          if (game4096.isGameOver) {
-            game4096.updateGameOverScores();
+        game4096.commandDirection("right");
 
-            setTimeout(() => {
-              $("#section-in-game-screen").hide();
-              $("#section-end-screen").show();
-            }, 2500);
-          }
-        }
-        return "move right";
+        // return "move right";
       } else if (distanceY > 50) {
-        if (
-          !game4096.isGameOver &&
-          !game4096.isGamePaused &&
-          !game4096.swipeMotion
-        ) {
-          game4096.commandUp();
-          if (game4096.didMove) {
-            game4096.randomPopulate();
-            game4096.updateGridDOM();
-            game4096.updateScoreboard();
-          }
-          game4096.checkGameOver();
-          if (game4096.isGameOver) {
-            game4096.updateGameOverScores();
+        game4096.commandDirection("up");
 
-            setTimeout(() => {
-              $("#section-in-game-screen").hide();
-              $("#section-end-screen").show();
-            }, 2500);
-          }
-        }
-        return "move up";
+        // return "move up";
       } else if (distanceY < -50) {
-        if (
-          !game4096.isGameOver &&
-          !game4096.isGamePaused &&
-          !game4096.swipeMotion
-        ) {
-          game4096.commandDown();
-          if (game4096.didMove) {
-            game4096.randomPopulate();
-            game4096.updateGridDOM();
-            game4096.updateScoreboard();
-          }
-          game4096.checkGameOver();
-          if (game4096.isGameOver) {
-            game4096.updateGameOverScores();
-
-            setTimeout(() => {
-              $("#section-in-game-screen").hide();
-              $("#section-end-screen").show();
-            }, 2500);
-          }
-        }
-        return "move down";
+        game4096.commandDirection("down");
       }
     },
 
+    commandDirection: direction => {
+      if (
+        !game4096.isGameOver &&
+        !game4096.isGamePaused &&
+        !game4096.swipeMotion
+      ) {
+        switch (direction) {
+          case "up":
+            game4096.commandUp();
+
+            break;
+          case "down":
+            game4096.commandDown();
+
+            break;
+          case "left":
+            game4096.commandLeft();
+
+            break;
+          case "right":
+            game4096.commandRight();
+
+            break;
+          default:
+        }
+        if (game4096.didMove) {
+          game4096.randomPopulate();
+          game4096.updateGridDOM();
+          game4096.updateScoreboard();
+        }
+        game4096.checkGameOver();
+        if (game4096.isGameOver) {
+          game4096.updateGameOverScores();
+
+          let timeoutID;
+          clearTimeout(timeoutID);
+          timeoutID = setTimeout(() => {
+            $("#section-in-game-screen").hide();
+            $("#section-end-screen").show();
+          }, 2500);
+        }
+      }
+    },
     resetGame: () => {
       game4096.mileStone = 8;
       game4096.currentScore = 0;
@@ -441,7 +322,10 @@ $(() => {
 
       game4096.spawnIndex.forEach(oneIndex => {
         $(`#grid-${oneIndex}`).parent().addClass("spawn");
-        setTimeout(() => {
+
+        let timeoutID;
+        clearTimeout(timeoutID);
+        timeoutID = setTimeout(() => {
           $(`#grid-${oneIndex}`).parent().removeClass("spawn");
         }, 200);
       });
@@ -449,7 +333,10 @@ $(() => {
       if (game4096.mergeIndex.length > 0) {
         game4096.mergeIndex.forEach(oneIndex => {
           $(`#grid-${oneIndex}`).parent().addClass("merge");
-          setTimeout(() => {
+
+          let timeoutID;
+          clearTimeout(timeoutID);
+          timeoutID = setTimeout(() => {
             $(`#grid-${oneIndex}`).parent().removeClass("merge");
           }, 200);
         });
@@ -485,7 +372,10 @@ $(() => {
             );
 
             $(".milestone-message").addClass("color-flash");
-            setTimeout(() => {
+
+            let timeoutID;
+            clearTimeout(timeoutID);
+            timeoutID = setTimeout(() => {
               $(".milestone-message").removeClass("color-flash");
             }, 1000);
           }
