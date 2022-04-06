@@ -1,9 +1,21 @@
 /* Elements */
 
+html {
+  min-height: 100%; /* We have to fix html height */
+  display: flex;
+  flex-direction: column;
+}
+
 body {
   background-color: #12221d;
   font-family: "Rubik", sans-serif;
   overflow: hidden;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  /* min-height: 100vh;
+  min-height: -webkit-fill-available; */
+  flex-grow: 1;
 }
 
 h1 {
@@ -35,6 +47,7 @@ label {
 /* Utility */
 
 .shaking {
+  -webkit-animation: left-to-right 0.05s 3 alternate;
   animation: left-to-right 0.05s 3 alternate;
 }
 
@@ -49,6 +62,7 @@ label {
 }
 
 .color-flash {
+  -webkit-animation: color-flash 0.75s 1 forwards ease;
   animation: color-flash 0.75s 1 forwards ease;
 }
 
@@ -84,6 +98,7 @@ label {
 }
 
 .spawn {
+  -webkit-animation: spawn 0.3s 1 ease-in-out;
   animation: spawn 0.3s 1 ease-in-out;
 }
 
@@ -97,6 +112,7 @@ label {
 }
 
 .merge {
+  -webkit-animation: merge 0.3s 1 ease-in-out;
   animation: merge 0.3s 1 ease-in-out;
 }
 
